@@ -1,0 +1,637 @@
+{include_template file="layout/main.head.html"}
+
+<script type="text/javascript" src="{$base_url}resources/javascript/jquery/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="{$base_url}resources/javascript/jquery/jquery-ui.js"></script>
+<link rel="stylesheet" href="{$base_url}resources/themes/{$set_theme}/css/jquery-ui.css" />
+
+<form action="{$base_url}{$fil_index_register}" id="register" method="post" autocomplete="off">
+
+  <input type="hidden" name="output_referer" value="{$output_referer}" />
+{if !$invitation}
+	<input type="hidden" name="cmd" value="process" />
+{else}
+	<input type="hidden" name="cmd" value="processInvitation" />
+	<input type="hidden" name="userid" value="{$userid}" />
+	<input type="hidden" name="key" value="{$key}" />
+{/if}
+
+<div class="block">
+
+	{if !$invitation}
+				
+		<div class="head">##ACCOUNT_005##</div>
+	
+	{else}
+	
+		<div class="head">##ACCOUNT_117##</div>
+	
+	{/if}
+	
+	<div class="body">
+		
+		<div class="box col-12">
+		
+			{if $problem || $captcha_failure}
+				
+				<h2>##ACCOUNT_002##</h2>
+				
+				<p>##ACCOUNT_003##</p>
+				
+				<ol>
+				
+				{if $captcha_failure}
+					<li class="error">##ACCOUNT_004##</li>
+				{/if}
+				
+				{section name="problems" loop=$profile_errors}
+					
+					<li class="error">{$profile_errors[problems]}</li>
+				
+				{/section}
+				</ol>
+				
+			{else}
+			
+				{if !$invitation}
+				
+					<p>##ACCOUNT_006##</p>
+					
+				{else}
+				
+					<p>##ACCOUNT_119##</p>
+					
+				{/if}
+				
+			{/if}
+			
+		</div>
+		
+		<div class="clear"></div>
+		
+		
+		{if $data_salutation == "1"}
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_008##</h3>
+			</div>
+			<div class="box col-6 formfield">
+				<input type="text" name="formal_title" class="text width-1" value="{$formal_title}" />
+				{if $data_salutation_req} <span class="highlight">##ACCOUNT_009##</span>{/if}
+			</div>
+			<div class="clear"></div>
+		{/if}
+
+		<div class="box col-5 formtitle">
+			<h3>##ACCOUNT_010##</h3>
+		</div>
+		<div class="box col-6 formfield">
+			<input type="text" maxlength="50" name="first_name" value="{$first_name}" class="text width-3 required" /> <span class="highlight">##ACCOUNT_009##</span>
+		</div>
+		<div class="clear"></div>
+			
+			
+		<div class="box col-5 formtitle">
+			<h3>##ACCOUNT_011##</h3>
+		</div>
+		<div class="box col-6 formfield">
+			<input type="text" maxlength="50" name="family_name" value="{$family_name}" class="text width-3 required" /> <span class="highlight">##ACCOUNT_009##</span>
+		</div>
+		<div class="clear"></div>
+		
+		<div class="box col-5 formtitle">
+			<h3>Gender:</h3>
+		</div>
+		<div class="box col-6 formfield"> 
+			<input type="radio" name="gender" class="" id="" value="male" {if $gender == "male"}checked="checked"{/if} />male<input type="radio" name="gender" class="" id="" value="female" {if $gender == "female"}checked="checked"{/if} />female
+			
+		</div>
+		<div class="clear"></div>
+		
+		<div class="box col-5 formtitle">
+			<h3>Date of Birth </h3>
+		</div>
+		<div class="box col-6 formfield">
+			
+			<input type="text" maxlength="50" name="calender" value="{$calender}" class="text width-3 required" id="ds" ><img src="{$base_url}resources/templates_default/register/images/calendar.png"> 
+			
+		</div>
+		<div class="clear"></div>
+			
+			
+		{if $data_pseudonym == "1"}
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_126##</h3>
+			</div>
+			<div class="box col-6 formfield">
+				<input type="text" maxlength="50" name="pseudonym" value="{$pseudonym}" class="text width-3" />
+			</div>
+			<div class="clear"></div>
+		{/if}
+			
+		{if !$invitation}
+		
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_012##</h3>
+			</div>
+			<div class="box col-6 formfield">
+				<input type="text" maxlength="50" name="email_address" value="{$email_address}" class="text width-3 required" /> <span class="highlight">##ACCOUNT_009##</span>
+				<input type="hidden" name="email_address_old" value="{$email_address}" />
+			</div>
+			<div class="clear"></div>
+			
+		{else}
+		
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_012##</h3>
+			</div>
+			<div class="box col-6 formfield">
+				{$email_address}
+			</div>
+			<div class="clear"></div>
+			
+		{/if}
+		
+		{if $data_marketing_contact}
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_146##</h3>
+			</div>
+			<div class="box col-6 formfield">
+				<input type="checkbox" name="marketing_contact" {if $marketing_contact}checked="checked"{/if} class="checkbox" />
+			</div>
+			<div class="clear"></div>
+		{/if}
+			
+	</div>
+
+</div>
+
+{if $data_telephone || $data_mobile || $data_facsimile}
+
+	<div class="block">
+	
+		<div class="head">##ACCOUNT_129##</div>
+		
+		<div class="body">
+			
+			{if $data_telephone}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_013##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="50" name="telephone" value="{$telephone}" class="text width-3" />
+					{if $data_telephone_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+						
+			{if $data_mobile}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_014##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="50" name="mobile" value="{$mobile}" class="text width-3"" />
+					{if $data_mobile_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+		
+		
+			{if $data_facsimile}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_015##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="50" name="fax" value="{$fax}" class="text width-3"" />
+					{if $data_facsimile_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+		
+		</div>
+				
+	</div>
+
+{/if}
+
+{if $data_business_type || $data_company_name || $data_business_position || $data_image_interest || $data_frequency || $data_circulation || $data_territories || $data_website || $data_sales_tax || $data_reg_custom_01 || $data_reg_custom_02 || $data_reg_custom_03 || $data_reg_custom_04 || $data_reg_custom_05}
+		
+	<div class="block">
+				
+		<div class="head">##ACCOUNT_128##</div>
+				
+			<div class="body">
+			
+			{if $data_business_type}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_016##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="other_business_type" value="{$other_business_type}" class="text width-3"" />
+					{if $data_business_type_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+			
+			{if $data_company_name}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_017##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="other_company_name" value="{$other_company_name}" class="text width-3"" />
+					{if $data_company_name_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+			
+			{if $data_business_position}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_018##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="other_business_position" value="{$other_business_position}" class="text width-3"" />
+					{if $data_business_position_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+						
+			{if $data_image_interest}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_019##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<textarea rows="4" name="other_image_interest" class="text width-5" onKeyDown="textCounter(this.form.other_image_interest,this.form.other_image_interestleft,255);" onKeyUp="textCounter(this.form.other_image_interest,this.form.other_image_interestleft,255);">{$other_image_interest}</textarea>
+					{if $data_image_interest_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+					<p><input readonly="readonly" type="text" name="other_image_interestleft" size="3" maxlength="3" value="255" tabindex="101" class="text"> ##ACCOUNT_020##</p>
+				</div>
+				<div class="clear"></div>
+			{/if}
+						
+			{if $data_frequency}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_021##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="other_frequency" value="{$other_frequency}" class="text width-3" />
+					{if $data_frequency_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+			
+			{if $data_circulation}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_022##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="other_circulation" value="{$other_circulation}" class="text width-3" />
+					{if $data_circulation_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+			
+			{if $data_territories}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_023##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="other_territories" value="{$other_territories}" class="text width-3" />
+					{if $data_territories_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+			
+			{if $data_website}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_024##</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="other_website" value="{$other_website}" class="text width-3" />
+					{if $data_website_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+				
+			{if $data_sales_tax}
+				<div class="box col-5 formtitle">
+					<h3>##ACCOUNT_140##:</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="sales_tax" value="{$sales_tax}" class="text width-3" />
+					{if $data_sales_tax_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+				
+			{if $data_reg_custom_01}
+				<div class="box col-5 formtitle">
+					<h3>{if $reg_custom_01_name}{$reg_custom_01_name}{else}##ACCOUNT_141##{/if}:</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="reg_custom_01" value="{$reg_custom_01}" class="text width-3" />
+					{if $data_reg_custom_01_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+				
+			{if $data_reg_custom_02}
+				<div class="box col-5 formtitle">
+					<h3>{if $reg_custom_02_name}{$reg_custom_02_name}{else}##ACCOUNT_142##{/if}:</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="reg_custom_02" value="{$reg_custom_02}" class="text width-3" />
+					{if $data_reg_custom_02_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+				
+			{if $data_reg_custom_03}
+				<div class="box col-5 formtitle">
+					<h3>{if $reg_custom_03_name}{$reg_custom_03_name}{else}##ACCOUNT_143##{/if}:</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="reg_custom_03" value="{$reg_custom_03}" class="text width-3" />
+					{if $data_reg_custom_03_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+				
+			{if $data_reg_custom_04}
+				<div class="box col-5 formtitle">
+					<h3>{if $reg_custom_04_name}{$reg_custom_04_name}{else}##ACCOUNT_144##{/if}:</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="reg_custom_04" value="{$reg_custom_04}" class="text width-3" />
+					{if $data_reg_custom_04_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+				
+			{if $data_reg_custom_05}
+				<div class="box col-5 formtitle">
+					<h3>{if $reg_custom_05_name}{$reg_custom_05_name}{else}##ACCOUNT_145##{/if}:</h3>
+				</div>
+				<div class="box col-6 formfield">
+					<input type="text" maxlength="500" name="reg_custom_05" value="{$reg_custom_05}" class="text width-3" />
+					{if $data_reg_custom_05_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				</div>
+				<div class="clear"></div>
+			{/if}
+				
+		</div>
+				
+	</div>
+		
+{/if}
+
+{if $data_address}
+			
+	<div class="block">
+			
+		<div class="head">##ACCOUNT_125##</div>
+			
+			<div class="body">
+			
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_025##</h3>
+			</div>
+
+			<div class="box col-6 formfield">
+				<input type="text" maxlength="50" name="addr1" value="{$addr1}" class="text width-3" />
+				{if $data_address_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				<p><input type="text" maxlength="50" name="addr2" value="{$addr2}" class="text width-3" /></p>
+				<p><input type="text" maxlength="50" name="addr3" value="{$addr3}" class="text width-3" /></p>
+			</div>
+			<div class="clear"></div>
+			
+			
+			
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_026##</h3>
+			</div>
+			<div class="box col-6 formfield">
+				<input type="text" maxlength="50" name="city" value="{$city}" class="text width-3" />
+				{if $data_address_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+			</div>
+			<div class="clear"></div>
+			
+			
+			
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_028##</h3>
+			</div>
+			<div class="box col-6">
+			
+				<select name="country" id="country" class="select width-3" onchange="javascript:if (this.options[selectedIndex].value != '') loadRegionData();">
+				
+					<option value="">##ACCOUNT_029##</option>
+					
+					<option value=""></option>
+				
+					<option value="AU">{$name_iso.AU}</option>
+					<option value="AT">{$name_iso.AT}</option>
+					<option value="BE">{$name_iso.BE}</option>
+					<option value="BR">{$name_iso.BR}</option>
+					<option value="CA">{$name_iso.CA}</option>
+					<option value="DK">{$name_iso.DK}</option>
+					<option value="FR">{$name_iso.FR}</option>
+					<option value="DE">{$name_iso.DE}</option>
+					<option value="NL">{$name_iso.NL}</option>
+					<option value="NO">{$name_iso.NO}</option>
+					<option value="ES">{$name_iso.ES}</option>
+					<option value="SE">{$name_iso.SE}</option>
+					<option value="GB">{$name_iso.GB}</option>
+					<option value="US">{$name_iso.US}</option>
+					
+					<option value=""></option>
+				
+				{foreach from=$name_iso key=k item=v}
+			
+					{if $country == $k}
+					
+						<option value="{$k}" selected="selected">{$v}</option>
+					
+					{elseif $country == $v}
+					
+						<option value="{$k}" selected="selected">{$v}</option>
+					
+					{else}
+					
+						<option value="{$k}">{$v}</option>
+					
+					{/if}
+			
+				{/foreach}
+				
+				</select>
+				
+			</div>
+			<div class="clear"></div>
+			
+			
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_027##</h3>
+			</div>
+			<div class="box col-6 formfield" id="regions">
+				<input type="text" maxlength="50" name="region" value="{$region}" class="text width-3" />
+			</div>
+			<div class="clear"></div>
+			
+			
+			
+			
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_030##</h3>
+			</div>
+			<div class="box col-6">
+				<input type="text" maxlength="50" name="postal_code" value="{$postal_code}" class="text width-3" />
+				{if $data_address_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+			</div>
+			<div class="clear"></div>
+			
+		</div>
+	
+	</div>
+		
+{/if}
+
+{if $data_message}
+			
+	<div class="block">
+				
+		<div class="head">##ACCOUNT_041##</div>
+				
+			<div class="body">
+			
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_042##</h3>
+			</div>
+			<div class="box col-6">
+				<textarea rows="4" name="other_message" class="text width-5" onKeyDown="textCounter(this.form.other_message,this.form.other_message_textleft,255);" onKeyUp="textCounter(this.form.other_message,this.form.other_message_textleft,255);"></textarea>
+				{if $data_message_req == "1"}<span class="highlight">##ACCOUNT_009##</span>{/if}
+				
+				
+				<p><input readonly="readonly" type="text" name="other_message_textleft" size="3" maxlength="3" value="255" tabindex="101" class="text"> ##ACCOUNT_020##</p>
+			</div>
+			<div class="clear"></div>
+					
+		</div>
+	
+	</div>
+					
+{/if}
+
+<div class="block">
+				
+	<div class="head">##ACCOUNT_031##</div>
+				
+		<div class="body">
+
+		<div class="box col-5 formtitle">
+			<h3>##ACCOUNT_032##</h3>
+		</div>
+		<div class="box col-6 formfield">
+			<p>##ACCOUNT_033##</p>
+			
+			<input type="password" maxlength="50" name="password_1" value="{$password_1}" class="text width-3 required" /> <span class="highlight">##ACCOUNT_009##</span>
+		</div>
+		<div class="clear"></div>
+			
+
+		<div class="box col-5 formtitle">
+			<h3>##ACCOUNT_034##</h3>
+		</div>
+		<div class="box col-6 formfield">
+			<input type="password" maxlength="50" name="password_2" value="{$password_2}" class="text width-3 required" /> <span class="highlight">##ACCOUNT_009##</span>
+		</div>
+		<div class="clear"></div>
+			
+
+
+		<div class="box col-5 formtitle">
+			<h3>##ACCOUNT_035##</h3>
+		</div>
+		<div class="box col-6 formfield">
+			<input type="text" maxlength="500" name="password_rem_que" value="{$password_rem_que}" class="text width-5 required" /> <span class="highlight">##ACCOUNT_009##</span>
+		</div>
+		<div class="clear"></div>
+			
+
+
+		<div class="box col-5 formtitle">
+			<h3>##ACCOUNT_036##</h3>
+		</div>
+		<div class="box col-6 formfield">
+			<input type="text" maxlength="500" name="password_rem_ans" value="{$password_rem_ans}" class="text width-5 required" /> <span class="highlight">##ACCOUNT_009##</span>
+		</div>
+		<div class="clear"></div>
+					
+		{if $set_func_captcha_registration}
+				
+			<div class="box col-5 formtitle">
+				<h3>##ACCOUNT_037##</h3>
+			</div>
+			<div class="box col-6 formfield">
+				<p>##ACCOUNT_038##</p>
+				
+				<img src="{$base_url}index.captcha.php?key={$captcha_key}" width="332" height="60" alt="##ACCOUNT_039##" />
+				
+				<p><input type="hidden" name="captcha_key" value="{$captcha_key}" />
+				
+				<input type="text" maxlength="5" name="captcha_code" style="width:50px;" class="text required" /> <span class="highlight">##ACCOUNT_009##</span></p>
+			</div>
+			<div class="clear"></div>
+				
+		{/if}
+			
+		{if !$invitation}
+		
+			<div class="box col-5 formtitle"></div>
+			<div class="box col-6 formfield">
+				<input type="button" name="button" onclick="javascript:document.forms['register'].submit();" value="##ACCOUNT_040##" class="button" />
+			</div>
+		
+		{else}
+		
+			<div class="box col-5 formtitle"></div>
+			<div class="box col-6 formfield">
+				<input type="button" name="button" onclick="javascript:document.forms['register'].submit();" value="##ACCOUNT_120##" class="button" />
+			</div>
+
+		{/if}
+		
+		<div class="clear"></div>
+		
+	</div>
+
+</div>
+
+</form>
+
+<script type="text/javascript">
+{literal}
+function loadRegionData () {
+	new Ajax.Updater('regions', '{/literal}{$base_url}{$fil_index_account}{literal}', {
+		
+		parameters: {
+			selected: '{/literal}{$region}{literal}',
+			element_name: 'region',
+			element_id: 'region',
+			cmd:'getRegions',
+			country_code: $F('country')
+		}
+		
+	});
+}
+{/literal}
+</script>
+<script type="text/javascript"> 
+		{literal}
+	
+		$(function(){
+			$( "#ds" ).datepicker({ dateFormat: "dd-mm-yy" });
+			
+		});
+		
+		{/literal}
+	</script>
+
+{include_template file="layout/main.foot.html"}
+
